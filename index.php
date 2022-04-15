@@ -1,3 +1,36 @@
+<?php
+require "config/config.php";
+session_start();
+
+if(empty($_SESSION['user_id']) && empty($_SESSION['logged_in'])) {
+  header('Location: login.php');
+ }
+
+
+ if(!empty($_GET['pageno'])){
+  $pageno = $_GET['pageno'];
+}else{
+  $pageno = 1;
+}
+ //offset is starting from zero
+$numberOFrecs = 6;
+$offset=($pageno - 1) * $numberOFrecs;
+  
+$pdostatement = $pdo->prepare("SELECT * FROM posts ORDER BY id DESC");
+$pdostatement->execute();
+
+$raw_result = $pdostatement->fetchAll();
+print_r(count($raw_result));
+$total_pages = ceil(count($raw_result)/$numberOFrecs);
+
+//for offset extraction
+$pdostatement = $pdo->prepare("SELECT * FROM posts ORDER BY id DESC LIMIT $offset,$numberOFrecs ");
+$pdostatement->execute();
+
+$result = $pdostatement->fetchAll();
+
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -18,7 +51,7 @@
 <div class="wrapper">
 
   <!-- Content Wrapper. Contains page content -->
-  <div class>
+  <div class="">
     <!-- Content Header (Page header) -->
     <section class="content-header">
       <div class="container-fluid">
@@ -29,91 +62,56 @@
     <!-- Main content -->
     <section class="content">
     <div class="row">
+      <?php
+      if($result) {
+        $i = 1;
+        foreach ($result as $value) { ?>
           <div class="col-md-4">
-            <!-- Box Comment -->
             <div class="card card-widget">
               <div class="card-header">
-                <div style="text-align:center !important;float:none" class="card-title">
-                  <h4 >Blog title<h4>
+                <div style="text-align:center !important; float:none" class="card-title">
+                  <h4><?php echo $value['title'] ?></h4>
                 </div>
-                <!-- /.user-block -->
-
               </div>
-              <!-- /.card-header -->
               <div class="card-body">
-                <img class="img-fluid pad" src="dist/img/photo2.png" alt="Photo">
-
-                <p>I took this photo this morning. What do you guys think?</p>
-                <!-- <button type="button" class="btn btn-default btn-sm"><i class="fas fa-share"></i> Share</button> -->
-                <!-- <button type="button" class="btn btn-default btn-sm"><i class="far fa-thumbs-up"></i> Like</button> -->
-                <!-- <span class="float-right text-muted">3 comments</span> -->
+                <a href="blogdetail.php?id=<?php echo $value['id']?>"><img class="img-fluid pad" src="admin/images/<?php echo $value['image']?>" style="height: 200px !important;"> </a>
               </div>
-              <!-- /.card-body -->
 
             </div>
-            <!-- /.card -->
           </div>
-           <!-- /.col -->
-           <div class="col-md-4">
-            <!-- Box Comment -->
-            <div class="card card-widget">
-              <div class="card-header">
-                <div style="text-align:center !important;float:none" class="card-title">
-                  <h4 >Blog title<h4>
-                </div>
-                <!-- /.user-block -->
 
-              </div>
-              <!-- /.card-header -->
-              <div class="card-body">
-                <img class="img-fluid pad" src="dist/img/photo2.png" alt="Photo">
+        <?php
+        $i++;
+        }
+      }
+      ?>
+    </div>
+    </div>
+    </section>
 
-                <p>I took this photo this morning. What do you guys think?</p>
-                <!-- <button type="button" class="btn btn-default btn-sm"><i class="fas fa-share"></i> Share</button> -->
-                <!-- <button type="button" class="btn btn-default btn-sm"><i class="far fa-thumbs-up"></i> Like</button> -->
-                <!-- <span class="float-right text-muted">3 comments</span> -->
-              </div>
-              <!-- /.card-body -->
+    <!-- /.col -->
+    <nav aria-label="Page navigation example" style="float:right">
+      <ul class="pagination">
+        <li class="page-item"><a class="page-link" href="?pageno=1">First</a></li>
+        <li class="page-item  <?php if($pageno <= 1) { echo 'disabled';} ?>" >
+          <a class="page-link" href="<?php if($pageno <= 1) {echo '#';}else{echo "?pageno=".($pageno-1);}?>">Previous</a></li>
+        <li class="page-item"><a class="page-link" href="#"><?php echo $pageno; ?> </a></li>
+        <li class="page-item <?php if($pageno >= $total_pages) {echo 'disabled';} ?>">
+          <a class="page-link" href="<?php if($pageno >= $total_pages) {echo '#';} else{ echo "?pageno=".($pageno+1);}?>">Next</a></li>
+        <li class="page-item"><a class="page-link" href="?pageno=<?php echo $total_pages?>">Last</a></li>
+      </ul>
+    </nav>
+        
+      </div>
 
-            </div>
-            <!-- /.card -->
-          </div>
-           <!-- /.col -->
-           <div class="col-md-4">
-            <!-- Box Comment -->
-            <div class="card card-widget">
-              <div class="card-header">
-                <div style="text-align:center !important;float:none" class="card-title">
-                  <h4 >Blog title<h4>
-                </div>
-                <!-- /.user-block -->
 
-              </div>
-              <!-- /.card-header -->
-              <div class="card-body">
-                <img class="img-fluid pad" src="dist/img/photo2.png" alt="Photo">
-
-                <p>I took this photo this morning. What do you guys think?</p>
-                <!-- <button type="button" class="btn btn-default btn-sm"><i class="fas fa-share"></i> Share</button> -->
-                <!-- <button type="button" class="btn btn-default btn-sm"><i class="far fa-thumbs-up"></i> Like</button> -->
-                <!-- <span class="float-right text-muted">3 comments</span> -->
-              </div>
-              <!-- /.card-body -->
-
-            </div>
-            <!-- /.card -->
-          </div>
-           <!-- /.col -->
-        </div>
-        <!-- /.row -->
-
-    <a id="back-to-top" href="#" class="btn btn-primary back-to-top" role="button" aria-label="Scroll to top">
-      <i class="fas fa-chevron-up"></i>
-    </a>
   </div>
   <!-- /.content-wrapper -->
-
-  <footer class="main-footer" style="margin-left:0px !important;">
+  <footer class="main-footer">
+    <!-- To the right -->
+    <div class="float-right d-none d-sm-inline">
+      <a href="logout.php" type="button" class="btn btn-default">logout</a>
+    </div>
     <!-- Default to the left -->
     <strong>Copyright &copy; 2022-2023 <a href="https://hsumonleiaung.w3spaces.com/">HsumonLei Aung</a>.</strong> All rights reserved.
   </footer>

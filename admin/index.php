@@ -13,7 +13,7 @@ if(!empty($_GET['pageno'])){
 }
 
 //offset is starting from zero
-$numberOFrecs = 1;
+$numberOFrecs = 3;
 $offset=($pageno - 1) * $numberOFrecs;
 
 if(empty($_POST['search'])){
@@ -55,7 +55,7 @@ include 'header.html';
 ?>
 
 <!-- Content Wrapper. Contains page content -->
-<div class="content-wrapper">
+<div class="content-wrapper" >
   <!-- Content Header (Page header) -->
   <div class="content-header">
     <div class="container-fluid">
@@ -87,7 +87,7 @@ include 'header.html';
                 foreach ($result as $value) { 
               ?>
                   <tr>
-                    <td><?php echo $value['id']?></td>
+                    <td><?php echo $i?></td>
                     <td><?php echo $value['title'] ?></td>
                     <td><?php echo substr($value['content'],0,100) ?></td>
 
@@ -107,6 +107,7 @@ include 'header.html';
                 <?php
                 $i++;
                 }
+               
               }
               ?>
               
@@ -132,16 +133,6 @@ include 'header.html';
   </div>
   <!-- /.content-header -->
 
-  <!-- Main content -->
-  <div class="content">
-    <div class="container-fluid">
-      <div class="row">
-
-        <!-- /.col-md-6 -->
-      </div>
-      <!-- /.row -->
-    </div><!-- /.container-fluid -->
-  </div>
   <!-- /.content -->
 </div>
 <!-- /.content-wrapper -->
