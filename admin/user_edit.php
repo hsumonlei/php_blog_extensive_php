@@ -15,6 +15,11 @@ require '../config/config.php';
 //   header('Location: login.php');
 // }
 
+
+if ($_SESSION['role'] != 1) {
+    header('Location:login.php');
+  }
+  
 if ($_POST) {
   if (empty($_POST['name']) || empty($_POST['email'])) {
     if (empty($_POST['name'])) {

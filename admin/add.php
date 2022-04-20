@@ -6,6 +6,10 @@ if(empty($_SESSION['user_id']) && empty($_SESSION['logged_in'])) {
  header('Location: login.php');
 }
 
+if ($_SESSION['role'] != 1) {
+    header('Location:login.php');
+  }
+
 if($_POST){   
     // print "<pre>";
     // print_r($_FILES['image']);

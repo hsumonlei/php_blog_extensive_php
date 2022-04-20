@@ -5,6 +5,30 @@ session_start();
 if(empty($_SESSION['user_id']) && empty($_SESSION['logged_in'])) {
  header('Location:login.php');
 }
+if ($_SESSION['role'] != 1) {
+  header('Location:login.php');
+}
+print_r(empty($_POST['search']));
+
+// if(!empty($_POST['search'])) {
+//   setcookie('search',$_POST['search'], time() + (86400 * 30), "/");
+//   echo $_POST['search'];
+// }else{
+//   if (empty($_GET['pageno'])) {
+//     unset($_COOKIE['search']); 
+//     setcookie('search', null, -1, '/'); 
+//   }
+// }
+if (!empty($_POST['search'])) {
+  print_r($_POST['search']);
+  setcookie('search',$_POST['search'], time() + (86400 * 30), "/");
+}else{
+  if (empty($_GET['pageno'])) {
+    unset($_COOKIE['search']); 
+    setcookie('search', null, -1, '/'); 
+  }
+}
+
 
 if(!empty($_GET['pageno'])){
   $pageno = $_GET['pageno'];
@@ -16,7 +40,7 @@ if(!empty($_GET['pageno'])){
 $numberOFrecs = 3;
 $offset=($pageno - 1) * $numberOFrecs;
 
-if(empty($_POST['search'])){
+if(empty($_POST['search']) && empty($_COOKIE['search'])){
   
 $pdostatement = $pdo->prepare("SELECT * FROM posts ORDER BY id DESC");
 $pdostatement->execute();
@@ -31,7 +55,19 @@ $pdostatement->execute();
 
 $result = $pdostatement->fetchAll();
 }else{
-  $searchKey = $_POST['search'];
+
+
+  if (isset($_POST['search'])) {
+    $searchKey = $_POST['search'];
+  } else {
+  if (isset($_COOKIE['search'])) {
+    $searchKey =  $_COOKIE['search'];
+  }else{
+    $value = $defaultValue;
+  }
+} 
+  //$searchKey = $_POST['search'] ? $_POST['search'] : $_COOKIE['search'];
+  //$searchKey = $_POST['search'];
   $pdostatement = $pdo->prepare("SELECT * FROM posts WHERE  title LIKE '%$searchKey%' ORDER BY id DESC");
 
   //print_r($pdostatement);
@@ -66,7 +102,7 @@ include 'header.php';
           <div class="card-header">
             <!-- <h3 class="card-title">Striped Full Width Table</h3> -->
             <div class=""> 
-              <a href="user_list.php" type="button" class="btn btn-success">New Blog Post</a><br>
+              <a href="add.php" type="button" class="btn btn-success">New Blog Post</a><br>
             </div>
           </div>
           <!-- /.card-header -->

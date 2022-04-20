@@ -7,6 +7,7 @@ if ($_POST) {
   $name = $_POST['name'];
   $email = $_POST['email'];
   $password = $_POST['password'];
+  
 
   $pdostatement = $pdo->prepare("SELECT * FROM users WHERE email=:email");
   
@@ -19,11 +20,12 @@ if ($_POST) {
      echo "<script>alert('Insert New user with new email');</script>";
  }else{
 
-    $pdostatment = $pdo->prepare("INSERT INTO users(name,email,password) VALUES(:name,:email,:password)");
+    $pdostatment = $pdo->prepare("INSERT INTO users(name,email,password,role) VALUES(:name,:email,:password, :role)");
 
     $pdostatment->bindValue(':name',$name);
     $pdostatment->bindValue(':email',$email);
     $pdostatment->bindValue(':password',$password);
+    $pdostatment->bindValue(':role',0);
 
 
     $result = $pdostatment->execute();

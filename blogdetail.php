@@ -92,11 +92,16 @@ if ($_POST) {
 
     <!-- Main content -->
 <section class="content">
+    <div style="margin:left 5px top 5px !important;">
+    <br>
+    <a href="index.php" type="button" class="btn btn-default" >Go Back</a>
+    </div>
+
     <div class="row">
         <div class="col-md-12">
             <div class="card card-widget">
-                <div class="card-hearder">
-                    
+
+                <div class="card-hearder">              
                     <div style="text-align:center !important; float:none" class="card-title">
                         <h4><?php echo $result[0]['title'] ?></h4>
                     </div>

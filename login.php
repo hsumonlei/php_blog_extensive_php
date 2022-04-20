@@ -20,6 +20,7 @@ if ($_POST) {
       if($result['password']== $pwd){
         $_SESSION['user_id'] = $result['id'];
         $_SESSION['username'] = $result['name'];
+        $_SESSION['role'] = 0;
         $_SESSION['logged_in'] = time();
 
         header('Location: index.php');

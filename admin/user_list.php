@@ -3,50 +3,35 @@ session_start();
 require '../config/config.php';
 
 
-if(empty($_SESSION['user_id']) && empty($_SESSION['logged_in'])) {
- header('Location:login.php');
+if (empty($_SESSION['user_id']) && empty($_SESSION['logged_in'])) {
+  header('Location: login.php');
 }
 
-if(!empty($_GET['pageno'])){
-  $pageno = $_GET['pageno'];
-}else{
-  $pageno = 1;
+if ($_SESSION['role'] != 1) {
+  header('Location: login.php');
 }
 
-//offset is starting from zero
-$numberOFrecs = 3;
-$offset=($pageno - 1) * $numberOFrecs;
 
-if(empty($_POST['search'])){
-  
-$pdostatement = $pdo->prepare("SELECT * FROM users ORDER BY id DESC");
-$pdostatement->execute();
 
-$raw_result = $pdostatement->fetchAll();
-//print_r(count($result));
-$total_pages = ceil(count($raw_result)/$numberOFrecs);
+//print_r(empty($_POST['search']));
 
-//for offset extraction
-$pdostatement = $pdo->prepare("SELECT * FROM users ORDER BY id DESC LIMIT $offset,$numberOFrecs ");
-$pdostatement->execute();
-
-$result = $pdostatement->fetchAll();
+// if(!empty($_POST['search'])) {
+//   setcookie('search',$_POST['search'], time() + (86400 * 30), "/");
+//   echo $_POST['search'];
+// }else{
+//   if (empty($_GET['pageno'])) {
+//     unset($_COOKIE['search']); 
+//     setcookie('search', null, -1, '/'); 
+//   }
+// }
+if (!empty($_POST['search'])) {
+  //print_r($_POST['search']);
+  setcookie('search',$_POST['search'], time() + (86400 * 30), "/");
 }else{
-  $searchKey = $_POST['search'];
-  $pdostatement = $pdo->prepare("SELECT * FROM users WHERE  title LIKE '%$searchKey%' ORDER BY id DESC");
-
-  //print_r($pdostatement);
-  $pdostatement->execute();
-  
-  $raw_result = $pdostatement->fetchAll();
-  //print_r(count($result));
-  $total_pages = ceil(count($raw_result)/$numberOFrecs);
-  
-  //for offset extraction
-  $pdostatement = $pdo->prepare("SELECT * FROM users WHERE title LIKE '%$searchKey%' ORDER BY id DESC LIMIT $offset,$numberOFrecs ");
-  $pdostatement->execute();
-  
-  $result = $pdostatement->fetchAll();
+  if (empty($_GET['pageno'])) {
+    unset($_COOKIE['search']); 
+    setcookie('search', null, -1, '/'); 
+  }
 }
 
 ?>
@@ -64,6 +49,62 @@ include 'header.php';
         <div class="col-sm-12">
           <h1 class="m-0">User Listings</h1>
         <div class="card">
+          <?php
+          $defaultValue = 'search';
+              if (!empty($_GET['pageno'])) {
+                $pageno = $_GET['pageno'];
+              }else{
+                $pageno = 1;
+              }
+              //offset is starting from zero
+              $numberOFrecs = 2;
+              $offset=($pageno - 1) * $numberOFrecs;
+
+              if(empty($_POST['search']) && empty($_COOKIE['search'])){
+                    
+                  $pdostatement = $pdo->prepare("SELECT * FROM users ORDER BY id DESC");
+                  $pdostatement->execute();
+
+                  $raw_result = $pdostatement->fetchAll();
+                  //print_r(count($result));
+                  $total_pages = ceil(count($raw_result)/$numberOFrecs);
+
+                  //for offset extraction
+                  $pdostatement = $pdo->prepare("SELECT * FROM users ORDER BY id DESC LIMIT $offset,$numberOFrecs ");
+                  $pdostatement->execute();
+
+                  $result = $pdostatement->fetchAll();
+              }else{
+                //echo $_POST['search'];
+                if (isset($_POST['search'])) {
+                  $searchKey = $_POST['search'];
+                } else {
+                if (isset($_COOKIE['search'])) {
+                  $searchKey =  $_COOKIE['search'];
+                }else{
+                  $value = $defaultValue;
+                }
+              } 
+
+              //$searchKey = $_POST['search'] ? $_POST['search'] : $_COOKIE['search'];
+                
+                $pdostatement = $pdo->prepare("SELECT * FROM users WHERE  name LIKE '%$searchKey%' ORDER BY id DESC");
+
+                //print_r($pdostatement);
+                $pdostatement->execute();
+                
+                $raw_result = $pdostatement->fetchAll();
+                //print_r(count($result));
+                $total_pages = ceil(count($raw_result)/$numberOFrecs);
+                
+                //for offset extraction
+                $pdostatement = $pdo->prepare("SELECT * FROM users WHERE name LIKE '%$searchKey%' ORDER BY id DESC LIMIT $offset,$numberOFrecs ");
+                $pdostatement->execute();
+                
+                $result = $pdostatement->fetchAll();
+              }
+
+      ?>
           <div class="card-header">
             <!-- <h3 class="card-title">Striped Full Width Table</h3> -->
             <div class=""> 

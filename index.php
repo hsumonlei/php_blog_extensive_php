@@ -20,7 +20,7 @@ $pdostatement = $pdo->prepare("SELECT * FROM posts ORDER BY id DESC");
 $pdostatement->execute();
 
 $raw_result = $pdostatement->fetchAll();
-print_r(count($raw_result));
+//print_r(count($raw_result));
 $total_pages = ceil(count($raw_result)/$numberOFrecs);
 
 //for offset extraction
