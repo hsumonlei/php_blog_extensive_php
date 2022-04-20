@@ -36,7 +36,7 @@ $result = $pdostatement->fetchAll();
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>AdminLTE 3 | Widgets</title>
+  <title>Blog Site</title>
 
   <!-- Google Font: Source Sans Pro -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
@@ -107,7 +107,7 @@ $result = $pdostatement->fetchAll();
 
   </div>
   <!-- /.content-wrapper -->
-  <footer class="main-footer">
+  <footer class="main-footer" style="margin-left: 0px !important;">
     <!-- To the right -->
     <div class="float-right d-none d-sm-inline">
       <a href="login.php" type="button" class="btn btn-default">logout</a>

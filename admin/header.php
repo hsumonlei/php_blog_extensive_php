@@ -7,7 +7,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Hsu Blog|Starter </title>
+  <title>Blog|Admin Panel </title>
 
   <!-- Google Font: Source Sans Pro -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
@@ -34,7 +34,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
   $page = end($link_array);
 ?>
   <!-- SEARCH FORM-->
-  <form class="form-inline ml-3" method="post" action="index.php">
+  <form class="form-inline ml-3" method="post" action="<?php echo $page=='index.php' ? 'index.php' : 'user_list.php'; ?>">
     <div class="input-group input-group-sm">
       <input name="search" class="form-control form-control-navbar" type="search" placeholder="Search" aria-label="Search">
       <div class="input-group-append">

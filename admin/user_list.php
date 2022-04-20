@@ -100,7 +100,7 @@ include 'header.php';
                           <a href="user_edit.php?id=<?php echo $value['id'] ?>" type="button" class="btn btn-warning">Edit</a>
                         </div>
                         <div class="container">
-                          <a href="delete.php?id=<?php echo $value['id'] ?>" 
+                          <a href="user_delete.php?id=<?php echo $value['id'] ?>" 
                           onClick="return confirm('Are you sure you want to delete this item')" type="button" class="btn btn-danger">Delete</a>
                         </div>
                       </div>

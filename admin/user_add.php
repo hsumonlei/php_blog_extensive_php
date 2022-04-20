@@ -9,6 +9,7 @@ if(empty($_SESSION['user_id']) && empty($_SESSION['logged_in'])) {
 if($_POST){
     $name = $_POST['name'];
     $email = $_POST['email'];
+    $password = $_POST['password'];
     if(empty($_POST['role'])){
         $role = 0;
     }else{
@@ -24,9 +25,10 @@ if($_POST){
     if($user){
         echo "<script>alert('Email Duplicated');</script>";
     }else{
-        $pdostatement= $pdo->prepare("INSERT INTO users(name,email,role) VALUES(:name, :email, :role)");
+        $pdostatement= $pdo->prepare("INSERT INTO users(name,email,role,password) VALUES(:name, :email, :role, :password)");
         $pdostatement->bindValue(':name',$name);
         $pdostatement->bindValue(':email',$email);
+        $pdostatement->bindValue(':password',$password);
         $pdostatement->bindValue(':role',$role);
         $result = $pdostatement->execute();
 
@@ -70,6 +72,10 @@ include 'header.php';
                         <div class="form-group">
                             <label for="email">Email</label><br>
                             <input type="email" class="form-control" name="email" value="" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="password">Password</label><br>
+                            <input type="password" name="password" class="form-control" placeholder="Password">
                         </div>
                         <div class="form-group">
                             <label for="Admin">Admin</label><br>
