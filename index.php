@@ -100,7 +100,7 @@ $result = $pdostatement->fetchAll();
           <a class="page-link" href="<?php if($pageno >= $total_pages) {echo '#';} else{ echo "?pageno=".($pageno+1);}?>">Next</a></li>
         <li class="page-item"><a class="page-link" href="?pageno=<?php echo $total_pages?>">Last</a></li>
       </ul>
-    </nav>
+    </nav><br><br>
         
       </div>
 
@@ -110,7 +110,7 @@ $result = $pdostatement->fetchAll();
   <footer class="main-footer">
     <!-- To the right -->
     <div class="float-right d-none d-sm-inline">
-      <a href="logout.php" type="button" class="btn btn-default">logout</a>
+      <a href="login.php" type="button" class="btn btn-default">logout</a>
     </div>
     <!-- Default to the left -->
     <strong>Copyright &copy; 2022-2023 <a href="https://hsumonleiaung.w3spaces.com/">HsumonLei Aung</a>.</strong> All rights reserved.

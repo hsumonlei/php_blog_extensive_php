@@ -1,7 +1,8 @@
 <?php
+session_start();
 require '../config/config.php';
 
-session_start();
+
 if(empty($_SESSION['user_id']) && empty($_SESSION['logged_in'])) {
  header('Location:login.php');
 }
@@ -18,7 +19,7 @@ $offset=($pageno - 1) * $numberOFrecs;
 
 if(empty($_POST['search'])){
   
-$pdostatement = $pdo->prepare("SELECT * FROM posts ORDER BY id DESC");
+$pdostatement = $pdo->prepare("SELECT * FROM users ORDER BY id DESC");
 $pdostatement->execute();
 
 $raw_result = $pdostatement->fetchAll();
@@ -26,13 +27,13 @@ $raw_result = $pdostatement->fetchAll();
 $total_pages = ceil(count($raw_result)/$numberOFrecs);
 
 //for offset extraction
-$pdostatement = $pdo->prepare("SELECT * FROM posts ORDER BY id DESC LIMIT $offset,$numberOFrecs ");
+$pdostatement = $pdo->prepare("SELECT * FROM users ORDER BY id DESC LIMIT $offset,$numberOFrecs ");
 $pdostatement->execute();
 
 $result = $pdostatement->fetchAll();
 }else{
   $searchKey = $_POST['search'];
-  $pdostatement = $pdo->prepare("SELECT * FROM posts WHERE  title LIKE '%$searchKey%' ORDER BY id DESC");
+  $pdostatement = $pdo->prepare("SELECT * FROM users WHERE  title LIKE '%$searchKey%' ORDER BY id DESC");
 
   //print_r($pdostatement);
   $pdostatement->execute();
@@ -42,7 +43,7 @@ $result = $pdostatement->fetchAll();
   $total_pages = ceil(count($raw_result)/$numberOFrecs);
   
   //for offset extraction
-  $pdostatement = $pdo->prepare("SELECT * FROM posts WHERE title LIKE '%$searchKey%' ORDER BY id DESC LIMIT $offset,$numberOFrecs ");
+  $pdostatement = $pdo->prepare("SELECT * FROM users WHERE title LIKE '%$searchKey%' ORDER BY id DESC LIMIT $offset,$numberOFrecs ");
   $pdostatement->execute();
   
   $result = $pdostatement->fetchAll();
@@ -61,12 +62,12 @@ include 'header.php';
     <div class="container-fluid">
       <div class="row mb-2">
         <div class="col-sm-12">
-          <h1 class="m-0">Blog Listings</h1>
+          <h1 class="m-0">User Listings</h1>
         <div class="card">
           <div class="card-header">
             <!-- <h3 class="card-title">Striped Full Width Table</h3> -->
             <div class=""> 
-              <a href="user_list.php" type="button" class="btn btn-success">New Blog Post</a><br>
+              <a href="user_add.php" type="button" class="btn btn-success">Create User</a><br>
             </div>
           </div>
           <!-- /.card-header -->
@@ -75,8 +76,9 @@ include 'header.php';
               <thead>
                 <tr>
                   <th style="width: 10px">#</th>
-                  <th>Title</th>
-                  <th>Content</th>
+                  <th>Name</th>
+                  <th>Email</th>
+                  <th>Role</th>
                   <th style="width: 40px">Action</th>
                 </tr>
               </thead>
@@ -88,13 +90,14 @@ include 'header.php';
               ?>
                   <tr>
                     <td><?php echo $i?></td>
-                    <td><?php echo $value['title'] ?></td>
-                    <td><?php echo substr($value['content'],0,100) ?></td>
+                    <td><?php echo $value['name'] ?></td>
+                    <td><?php echo $value['email'] ?></td>
+                    <td><?php echo $value['role'] == 1 ? 'admin' : 'user'; ?></td>
 
                     <td>
                       <div class="btn-group">
                         <div class="container">
-                          <a href="edit.php?id=<?php echo $value['id'] ?>" type="button" class="btn btn-warning">Edit</a>
+                          <a href="user_edit.php?id=<?php echo $value['id'] ?>" type="button" class="btn btn-warning">Edit</a>
                         </div>
                         <div class="container">
                           <a href="delete.php?id=<?php echo $value['id'] ?>" 

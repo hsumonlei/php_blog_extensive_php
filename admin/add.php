@@ -49,7 +49,7 @@ if($_POST){
 
 <?php
 
-include 'header.html';
+include 'header.php';
 ?>
 
   <!-- Content Wrapper. Contains page content -->
