@@ -1,6 +1,10 @@
 <?php
-require 'config/config.php';
 session_start();
+
+require 'config/config.php';
+require 'config/common.php';
+
+
 
 if(empty($_SESSION['user_id']) && empty($_SESSION['logged_in'])) {
   header('Location: login.php');
@@ -103,7 +107,7 @@ if ($_POST) {
 
                 <div class="card-hearder">              
                     <div style="text-align:center !important; float:none" class="card-title">
-                        <h4><?php echo $result[0]['title'] ?></h4>
+                        <h4><?php echo escape($result[0]['title']) ?></h4>
                     </div>
                 </div>
 
@@ -111,7 +115,7 @@ if ($_POST) {
                 <img class="img-fluid pad" src="admin/images/<?php echo $result[0]['image']?>" >
                     <br>
 
-                    <p><?php echo $result[0]['content']?></p>
+                    <p><?php echo escape( $result[0]['content'])?></p>
                     <h3>Comments</h3><hr>
 
                 </div>
@@ -125,8 +129,8 @@ if ($_POST) {
                         <div class="comment-text" style="margin-left: 0px !important;">
                           <?php foreach ($cmt_result as $key => $value) { ?>
                             <span class="username">
-                              <?php print_r($au_result[$key][0]['name']) ?>
-                              <span class="text-muted float-right"><?php echo $value['created_at'] ?></span>
+                              <?php echo escape($au_result[$key][0]['name']) ?>
+                              <span class="text-muted float-right"><?php echo escape($value['created_at']) ?></span>
                         </span><!-- /.username -->
                         <?php echo $value['content'] ?><br>
                         <?php
@@ -145,6 +149,8 @@ if ($_POST) {
                 <!-- /.card-footer -->
                 <div class="card-footer">
                     <form action="" method="post">
+                    <input name="_token" type="hidden" value="<?php echo $_SESSION['_token'];?>">
+
                         <!-- .img-push is used to add margin to elements next to floating images -->
                         <div class="img-push">
                         <input type="text" name="comment" class="form-control form-control-sm" placeholder="Press enter to post comment">

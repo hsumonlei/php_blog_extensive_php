@@ -1,6 +1,7 @@
 <?php
 session_start();
 require '../config/config.php';
+require '../config/common.php';
 
 // print "<pre>";
 // print_r($_SESSION['user_id']);
@@ -83,16 +84,15 @@ include 'header.php';
                 <div class="card">
                     <div class="card-body">
                         <form class="" action="" method="post" enctype="multipart/form-data">
-                        <!-- <input name="_token" type="hidden" value="<?php echo $_SESSION['_token']; ?>"> -->
-
+                        <input name="_token" type="hidden" value="<?php echo $_SESSION['_token'];?>">
                             <div class="form-group">
-                            <input type="hidden" name="id" value="<?php echo $result[0]['id']?>">
+                            <input type="hidden" name="id" value="<?php echo escape($result[0]['id'])?>">
                             <label for="">Name</label><p style="color:red;"><?php echo empty($nameError) ? '' : '*'.$nameError; ?></p>
-                            <input type="text" class="form-control" name="name" value="<?php echo $result[0]['name']?>">
+                            <input type="text" class="form-control" name="name" value="<?php echo escape($result[0]['name'])?>">
                             </div>
                             <div class="form-group">
                             <label for="">Email</label><p style="color:red;"><?php echo empty($emailError) ? '' : '*'.$emailError; ?></p>
-                            <input type="email" class="form-control" name="email" value="<?php echo $result[0]['email']?>">
+                            <input type="email" class="form-control" name="email" value="<?php echo escape($result[0]['email'])?>">
                             </div>
                             <div class="form-group">
                             <label for="">Password</label><p style="color:red;"><?php echo empty($pwdError) ? '' : '*'.$pwdError; ?></p>
