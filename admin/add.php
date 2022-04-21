@@ -10,8 +10,20 @@ if ($_SESSION['role'] != 1) {
     header('Location:login.php');
   }
 
-if($_POST){   
-    // print "<pre>";
+if($_POST){ 
+    if (empty($_POST['title']) || empty($_POST['content']) || empty($_POST['image'])) {
+       
+        if(empty($_POST['title'])) {
+            $titleError = "Title cannot be null";
+        }
+        if(empty($_POST['content'])) {
+            $contentError = "Content Required";
+        }
+        if(empty($_POST['image'])) {
+            $imageError = "Image cannot be null";
+        }
+    }else{
+            // print "<pre>";
     // print_r($_FILES['image']);
 
     $file = 'images/'.($_FILES['image']['name']);
@@ -20,7 +32,7 @@ if($_POST){
     // print_r($file);
 
 
-    if ($imageType != 'png' && $imageType != 'jpg' &&  $imageType != 'jpeg') {
+    if ($imageType != 'png' && $imageType != 'jpg' &&  $imageType != 'jpeg' && $imageType != 'JPG' &&  $imageType != 'JPEG'  &&  $imageType != 'PNG') {
         echo "<script>alert('Image must be png, jpg and jpeg');</script>";
     }else{
         $title = $_POST['title'];
@@ -47,6 +59,8 @@ if($_POST){
         }
 
     }
+    }
+
 }
 ?>
 
@@ -77,16 +91,16 @@ include 'header.php';
                 <div class="card-body">
                     <form class="" action="add.php" method="post" enctype="multipart/form-data">
                         <div class="form-group">
-                            <label for="title">Title</label>
-                            <input type="text" class="form-control" name="title" value="" required>
+                            <label for="title">Title</label><p style="color:red;"><?php echo empty($titleError) ? '' : '*'.$titleError; ?></p>
+                            <input type="text" class="form-control" name="title" value="" >
                         </div>
                         <div class="form-group">
-                            <label for="content">Content</label><br>
+                            <label for="content">Content</label><br><p style="color:red;"><?php echo empty($contentError) ? '' : '*'. $contentError; ?></p>
                             <textarea name="content" class="form-control" id="" cols="100" rows="10"></textarea>
                         </div>
                         <div class="form-group">
-                            <label for="image">Image</label><br>
-                            <input type="file" name="image" required>
+                            <label for="image">Image</label><br><p style="color:red;"><?php echo empty($imageError) ? '' : '*'. $imageError; ?></p>
+                            <input type="file" name="image" >
                         </div>
                         <div class="form-group">
                             <input type="submit"  class="btn btn-success" value="Submit">

@@ -21,16 +21,18 @@ if ($_SESSION['role'] != 1) {
   }
   
 if ($_POST) {
-  if (empty($_POST['name']) || empty($_POST['email'])) {
-    if (empty($_POST['name'])) {
-      $nameError = 'Name cannot be null';
+  if (empty($_POST['name']) || empty($_POST['email']) ) {
+    if(empty($_POST['name'])) {
+        $nameError = "name cannot be null";
     }
-    if (empty($_POST['email'])) {
-      $emailError = 'Email cannot be null';
+    if(empty($_POST['email'])) {
+        $emailError = "Email Required";
     }
-  }elseif (!empty($_POST['password']) && strlen($_POST['password']) < 4) {
-    $passwordError = 'Password should be 4 characters at least';
-  }else{
+
+    elseif (!empty($_POST['password']) && strlen($_POST['password']) < 6 ) {
+      $pwdError = "Password should be 6 characters length at least";
+    }
+}else{
     $id = $_POST['id'];
     $name = $_POST['name'];
     $email = $_POST['email'];
@@ -85,15 +87,15 @@ include 'header.php';
 
                             <div class="form-group">
                             <input type="hidden" name="id" value="<?php echo $result[0]['id']?>">
-                            <label for="">Name</label>
+                            <label for="">Name</label><p style="color:red;"><?php echo empty($nameError) ? '' : '*'.$nameError; ?></p>
                             <input type="text" class="form-control" name="name" value="<?php echo $result[0]['name']?>">
                             </div>
                             <div class="form-group">
-                            <label for="">Email</label>
+                            <label for="">Email</label><p style="color:red;"><?php echo empty($emailError) ? '' : '*'.$emailError; ?></p>
                             <input type="email" class="form-control" name="email" value="<?php echo $result[0]['email']?>">
                             </div>
                             <div class="form-group">
-                            <label for="">Password</label>
+                            <label for="">Password</label><p style="color:red;"><?php echo empty($pwdError) ? '' : '*'.$pwdError; ?></p>
                             <span style="font-size:10px">The user already has a password</span>
                             <input type="password" name="password" class="form-control">
                             </div>
