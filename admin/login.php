@@ -17,7 +17,7 @@ if ($_POST) {
     //print_r($result);
     //for password hash code purpose
     if($result){
-      if($result['password']== $pwd){
+      if(password_verify($pwd,$result['password'])){
         $_SESSION['user_id'] = $result['id'];
         $_SESSION['username'] = $result['name'];
         $_SESSION['role'] = 1;
